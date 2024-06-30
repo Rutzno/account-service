@@ -3,17 +3,20 @@ package accountservice.service;
 import accountservice.dtos.UserPaymentDto;
 import accountservice.entities.MyUser;
 import accountservice.entities.Payment;
-import accountservice.exception.PaymentException;
+import accountservice.entities.SecurityEvent;
+import accountservice.exception.BadRequestException;
 import accountservice.repository.MyUserRepository;
 import accountservice.repository.PaymentRepository;
+import accountservice.repository.SecurityEventRepository;
 import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.Errors;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.YearMonth;
@@ -26,18 +29,23 @@ import java.util.Map;
 /**
  * @author Mack_TB
  * @since 23/06/2024
- * @version 1.0.5
+ * @version 1.0.6
  */
 
 @Service
+@Transactional
 public class EmployeeService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeService.class);
     private final MyUserRepository myUserRepository;
     private final PaymentRepository paymentRepository;
+    private final SecurityEventRepository securityEventRepository;;
+    public static final int MAX_FAILED_ATTEMPTS = 5;
 
     @Autowired
-    public EmployeeService(MyUserRepository myUserRepository, PaymentRepository paymentRepository) {
+    public EmployeeService(MyUserRepository myUserRepository, PaymentRepository paymentRepository, SecurityEventRepository securityEventRepository) {
         this.myUserRepository = myUserRepository;
         this.paymentRepository = paymentRepository;
+        this.securityEventRepository = securityEventRepository;
     }
 
     public MyUser getUserByEmail(Authentication auth) {
@@ -46,7 +54,11 @@ public class EmployeeService {
                         "User not found"));
     }
 
-    @Transactional
+    public MyUser getUserByEmail(String email) {
+        return myUserRepository.findByEmail(email);
+    }
+
+    //    @Transactional
     public ResponseEntity<?> savePayrolls(List<Payment> payments) {
         checkPaymentsValidity(payments);
         paymentRepository.saveAll(payments);
@@ -91,7 +103,7 @@ public class EmployeeService {
         }
     }
 
-    @Transactional
+    //    @Transactional
     public ResponseEntity<?> updatePayroll(Payment payment) {
         StringBuilder errorMessage = new StringBuilder();
         if (payment.getSalary() < 0) {
@@ -130,5 +142,26 @@ public class EmployeeService {
             }
         }
         return ResponseEntity.ok(userPaymentDtos);
+    }
+
+    public ResponseEntity<?> findAllEvents() {
+        LOGGER.info("Finding all security events");
+        Sort sortById = Sort.by("id").ascending();
+        List<SecurityEvent> events = securityEventRepository.findAll(sortById);
+        return ResponseEntity.ok(events);
+    }
+
+    public void increaseFailedAttempts(MyUser user) {
+        int newFailAttempts = user.getFailedLoginAttempts() + 1;
+        myUserRepository.updateFailedLoginAttempts(newFailAttempts, user.getEmail());
+    }
+
+    public void resetFailedAttempts(String email) {
+        myUserRepository.updateFailedLoginAttempts(0, email);
+    }
+
+    public void lock(MyUser user) {
+        user.setAccountNonLocked(false);
+        myUserRepository.save(user);
     }
 }

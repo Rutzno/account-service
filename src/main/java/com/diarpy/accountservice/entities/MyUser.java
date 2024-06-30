@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * @author Mack_TB
  * @since 23/06/2024
- * @version 1.0.5
+ * @version 1.0.6
  */
 
 @Entity
@@ -33,6 +33,8 @@ public class MyUser {
 //    @Min(12)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+    private boolean accountNonLocked;
+    private int failedLoginAttempts;
 
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(name = "user_groups",
@@ -80,6 +82,22 @@ public class MyUser {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public boolean isAccountNonLocked() {
+        return accountNonLocked;
+    }
+
+    public void setAccountNonLocked(boolean accountNonLocked) {
+        this.accountNonLocked = accountNonLocked;
+    }
+
+    public int getFailedLoginAttempts() {
+        return failedLoginAttempts;
+    }
+
+    public void setFailedLoginAttempts(int failedLoginAttempts) {
+        this.failedLoginAttempts = failedLoginAttempts;
     }
 
     public Set<Group> getUserGroups() {

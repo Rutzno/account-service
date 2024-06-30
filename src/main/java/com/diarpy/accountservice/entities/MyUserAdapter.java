@@ -12,7 +12,7 @@ import java.util.Set;
 /**
  * @author Mack_TB
  * @since 23/06/2024
- * @version 1.0.5
+ * @version 1.0.6
  */
 
 public class MyUserAdapter implements UserDetails {
@@ -49,7 +49,7 @@ public class MyUserAdapter implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return myUser.isAccountNonLocked();
     }
 
     @Override
@@ -60,5 +60,9 @@ public class MyUserAdapter implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public MyUser getMyUser() {
+        return myUser;
     }
 }

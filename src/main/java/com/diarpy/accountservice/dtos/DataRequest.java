@@ -8,10 +8,10 @@ import jakarta.validation.constraints.NotBlank;
 /**
  * @author Mack_TB
  * @since 23/06/2024
- * @version 1.0.5
+ * @version 1.0.6
  */
 
-public class RoleDto {
+public class DataRequest {
     @NotBlank
     private String user;
     private String role;

@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * @author Mack_TB
  * @since 23/06/2024
- * @version 1.0.5
+ * @version 1.0.6
  */
 
 @RestController
@@ -47,5 +47,10 @@ public class EmployeeController {
     @PutMapping("/acct/payments")
     public ResponseEntity<?> putPayroll(@RequestBody Payment payment) {
         return employeeService.updatePayroll(payment);
+    }
+
+    @GetMapping(value = {"/security/events", "/security/events/"})
+    public ResponseEntity<?> getEvents() {
+        return employeeService.findAllEvents();
     }
 }

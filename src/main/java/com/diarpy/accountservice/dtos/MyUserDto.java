@@ -4,13 +4,12 @@ import accountservice.entities.Group;
 import accountservice.entities.MyUser;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Mack_TB
  * @since 23/06/2024
- * @version 1.0.5
+ * @version 1.0.6
  */
 
 public class MyUserDto {
@@ -71,7 +70,7 @@ public class MyUserDto {
     }
 
     public Set<String> getRoles(MyUser myUser) {
-        Set<String> result = new HashSet<>();
+        Set<String> result = new TreeSet<>(); // use treeSet to have a sorted set
         for (Group group : myUser.getUserGroups()) {
             result.add(group.getName());
         }

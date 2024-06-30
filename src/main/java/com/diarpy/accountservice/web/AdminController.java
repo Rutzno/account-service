@@ -1,11 +1,12 @@
 package accountservice.web;
 
 import accountservice.dtos.MyUserDto;
-import accountservice.dtos.RoleDto;
+import accountservice.dtos.DataRequest;
 import accountservice.service.AdminService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,7 +14,7 @@ import java.util.List;
 /**
  * @author Mack_TB
  * @since 23/06/2024
- * @version 1.0.5
+ * @version 1.0.6
  */
 
 @RestController
@@ -30,8 +31,9 @@ public class AdminController {
      * changes user roles (sets the roles)
      */
     @PutMapping("/user/role")
-    public ResponseEntity<MyUserDto> updateRole(@RequestBody @Valid RoleDto roleDto) {
-        return adminService.updateRole(roleDto);
+    public ResponseEntity<MyUserDto> updateRole(Authentication auth,
+                                                @RequestBody @Valid DataRequest dataRequest) {
+        return adminService.updateRole(auth, dataRequest);
     }
 
     /**
@@ -46,7 +48,14 @@ public class AdminController {
      * deletes a user
      */
     @DeleteMapping("/user/{email}")
-    public ResponseEntity<?> deleteUser(@PathVariable String email) {
-        return adminService.deleteUser(email);
+    public ResponseEntity<?> deleteUser(Authentication auth,
+                                        @PathVariable String email) {
+        return adminService.deleteUser(auth, email);
+    }
+
+    @PutMapping("/user/access")
+    public ResponseEntity<?> updateUserLock(Authentication auth,
+                                            @RequestBody @Valid DataRequest dataRequest) {
+        return adminService.updateUserLock(auth, dataRequest);
     }
 }

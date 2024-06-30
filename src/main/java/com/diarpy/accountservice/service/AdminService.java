@@ -1,7 +1,7 @@
 package accountservice.service;
 
 import accountservice.dtos.MyUserDto;
-import accountservice.dtos.RoleDto;
+import accountservice.dtos.DataRequest;
 import accountservice.entities.Group;
 import accountservice.entities.MyUser;
 import accountservice.enums.Operation;
@@ -10,6 +10,7 @@ import accountservice.exception.NotFoundException;
 import accountservice.exception.UserNotFoundException;
 import accountservice.repository.GroupRepository;
 import accountservice.repository.MyUserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ import java.util.Map;
 /**
  * @author Mack_TB
  * @since 23/06/2024
- * @version 1.0.5
+ * @version 1.0.6
  */
 
 @Service
@@ -33,11 +34,15 @@ public class AdminService {
     private static final Logger LOGGER = LoggerFactory.getLogger(AdminService.class);
     private final MyUserRepository myUserRepository;
     private final GroupRepository groupRepository;
+    private final SecurityEventService securityEventService;
+    private final HttpServletRequest request;
 
     @Autowired
-    public AdminService(MyUserRepository myUserRepository, GroupRepository groupRepository) {
+    public AdminService(MyUserRepository myUserRepository, GroupRepository groupRepository, SecurityEventService securityEventService, HttpServletRequest request) {
         this.myUserRepository = myUserRepository;
         this.groupRepository = groupRepository;
+        this.securityEventService = securityEventService;
+        this.request = request;
     }
 
     public Group findGroupByName(String groupName) {
@@ -45,30 +50,39 @@ public class AdminService {
                 .orElseThrow(() -> new NotFoundException("Role not found!"));
     }
 
-    public ResponseEntity<MyUserDto> updateRole(RoleDto roleDto) {
-        LOGGER.info("Updating role: {}", roleDto.getRole());
-        MyUser myUser = getUserByEmail(roleDto.getUser());
+    public ResponseEntity<MyUserDto> updateRole(Authentication auth, DataRequest dataRequest) {
+        LOGGER.info("Updating role: {}", dataRequest.getRole());
+        MyUser myUser = getUserByEmail(dataRequest.getUser());
         MyUserDto myUserDto = new MyUserDto(myUser);
-        String authorityToAdd = "ROLE_" + roleDto.getRole().toUpperCase();
+        String roleName = dataRequest.getRole().toUpperCase();
+        String authorityToAdd = "ROLE_" + roleName;
         Group group = findGroupByName(authorityToAdd);
-        checkRules(myUserDto, roleDto);
+        checkRules(myUserDto, dataRequest);
 
-        switch (roleDto.getOperation()) {
-            case GRANT -> myUser.getUserGroups().add(group);
-            case REMOVE -> myUser.getUserGroups().remove(group);
+        switch (dataRequest.getOperation()) {
+            case GRANT -> {
+                myUser.getUserGroups().add(group);
+                securityEventService.save("GRANT_ROLE", auth.getName(),
+                        "Grant role "+roleName+" to "+myUser.getEmail(), request.getRequestURI());
+            }
+            case REMOVE -> {
+                myUser.getUserGroups().remove(group);
+                securityEventService.save("REMOVE_ROLE", auth.getName(),
+                        "Remove role "+roleName+" from "+myUser.getEmail(), request.getRequestURI());
+            }
             default -> throw new BadRequestException("Invalid operation!");
         }
         myUserRepository.save(myUser);
         return ResponseEntity.ok(new MyUserDto(myUser));
     }
 
-    private void checkRules(MyUserDto myUserDto, RoleDto roleDto) {
-        String authorityToAdd = "ROLE_" + roleDto.getRole().toUpperCase();
+    private void checkRules(MyUserDto myUserDto, DataRequest dataRequest) {
+        String authorityToAdd = "ROLE_" + dataRequest.getRole().toUpperCase();
         if (!groupRepository.existsByName(authorityToAdd)) {
             throw new NotFoundException("Role not found!");
         }
 
-        if (roleDto.getOperation().equals(Operation.REMOVE)) {
+        if (dataRequest.getOperation().equals(Operation.REMOVE)) {
             // If admin want to delete a role that has not been provided to a user
             if (!myUserDto.getRoles().contains(authorityToAdd)) {
                 throw new BadRequestException("The user does not have a role!");
@@ -90,7 +104,7 @@ public class AdminService {
         }
     }
 
-    public ResponseEntity<?> deleteUser(String email) {
+    public ResponseEntity<?> deleteUser(Authentication auth, String email) {
         LOGGER.info("Deleting user: {}", email);
         MyUser myUser = getUserByEmail(email);
         MyUserDto myUserDto = new MyUserDto(myUser);
@@ -100,6 +114,7 @@ public class AdminService {
             throw new BadRequestException("Can't remove ADMINISTRATOR role!");
         }
         myUserRepository.delete(myUser);
+        securityEventService.save("DELETE_USER", auth.getName(), myUser.getEmail(), "/api/admin/user");
         LOGGER.info("Deleted successfully!");
         Map<String, String> response = Map.of("user", email,
                 "status", "Deleted successfully!");
@@ -114,7 +129,6 @@ public class AdminService {
                 });
     }
 
-
     public List<MyUserDto> findAllUsers() {
         LOGGER.info("Finding all users");
         Sort sortById = Sort.by("id").ascending();
@@ -124,5 +138,37 @@ public class AdminService {
             response.add(new MyUserDto(myUser));
         }
         return response;
+    }
+
+    public ResponseEntity<?> updateUserLock(Authentication auth, DataRequest dataRequest) {
+        LOGGER.info("Updating user lock: {}", dataRequest.getOperation());
+        MyUser myUser = getUserByEmail(dataRequest.getUser());
+        MyUserDto myUserDto = new MyUserDto(myUser);
+        if (dataRequest.getOperation().equals(Operation.LOCK) ||
+                dataRequest.getOperation().equals(Operation.UNLOCK)) { //
+            if ((myUser.isAccountNonLocked() && dataRequest.getOperation().equals(Operation.LOCK)) ||
+                    (!myUser.isAccountNonLocked() && dataRequest.getOperation().equals(Operation.UNLOCK))) {
+                if (myUserDto.getRoles().contains("ROLE_ADMINISTRATOR")) {
+                    throw new BadRequestException("Can't lock the ADMINISTRATOR!");
+                }
+                if (dataRequest.getOperation().equals(Operation.LOCK)) {
+                    myUser.setAccountNonLocked(false);
+                    securityEventService.save("LOCK_USER", auth.getName(), "Lock user "+ myUser.getEmail(), request.getRequestURI());
+                } else {
+                    myUser.setAccountNonLocked(true);
+                    myUser.setFailedLoginAttempts(0);
+                    securityEventService.save("UNLOCK_USER", auth.getName(), "Unlock user "+ myUser.getEmail(), request.getRequestURI());
+                }
+            } else {
+                throw new BadRequestException("User is already " + dataRequest.getOperation().name());
+            }
+        } else {
+            throw new BadRequestException("Invalid operation!");
+        }
+        myUserRepository.save(myUser);
+        LOGGER.info("User {} {}ed!", myUser.getEmail(), dataRequest.getOperation().name().toLowerCase());
+        Map<String, String> response = Map.of("status", String.format("User %s %sed!", myUser.getEmail(),
+                dataRequest.getOperation().name().toLowerCase()));
+        return ResponseEntity.ok(response);
     }
 }
