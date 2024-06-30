@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 /**
  * @author Mack_TB
  * @since 23/06/2024
- * @version 1.0.2
+ * @version 1.0.3
  */
 
 @Entity
@@ -23,10 +23,11 @@ public class MyUser {
     @JsonProperty("lastname")
     private String lastName;
     @NotBlank
-    @Email(regexp = ".+@acme\\.com$")
+    @Email(regexp = ".+@acme\\.com")
     @Column(unique = true)
     private String email;
     @NotBlank
+    //    @Min(12)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
