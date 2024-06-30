@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @author Mack_TB
  * @since 23/06/2024
- * @version 1.0.2
+ * @version 1.0.3
  */
 
 @RestController
@@ -37,13 +37,10 @@ public class AuthController {
      * changes a user password
      */
     @PostMapping("/changepass")
-    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
-    public void changePassword(String oldPassword, String newPassword) {
-
+    public ResponseEntity<?> changePassword(Authentication auth,
+                                            @RequestBody @Valid PasswordRequest passwordRequest) {
+        return myUserService.changePassword(auth, passwordRequest.new_password());
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "test AAA";
-    }
+    record PasswordRequest(String new_password) {}
 }
