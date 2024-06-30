@@ -15,11 +15,14 @@ import org.springframework.security.web.SecurityFilterChain;
 /**
  * @author Mack_TB
  * @since 23/06/2024
- * @version 1.0.2
+ * @version 1.0.3
  */
 
 @Configuration
 public class SecurityConfig {
+    public static final String[] breachedPassword = {"PasswordForJanuary", "PasswordForFebruary", "PasswordForMarch", "PasswordForApril",
+            "PasswordForMay", "PasswordForJune", "PasswordForJuly", "PasswordForAugust",
+            "PasswordForSeptember", "PasswordForOctober", "PasswordForNovember", "PasswordForDecember"};
 
     private final RestAuthenticationEntryPoint restAuthenticationEntryPoint;
 
@@ -49,6 +52,6 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(13);
     }
 }
