@@ -1,16 +1,21 @@
-package account.entities;
+package accountservice.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
 /**
  * @author Mack_TB
  * @since 23/06/2024
- * @version 1.0.1
+ * @version 1.0.2
  */
 
+@Entity
 public class MyUser {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     @NotBlank
     @JsonProperty("name")
     private String firstName;
@@ -19,13 +24,24 @@ public class MyUser {
     private String lastName;
     @NotBlank
     @Email(regexp = ".+@acme\\.com$")
+    @Column(unique = true)
     private String email;
     @NotBlank
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String authority;
 
     public MyUser() {
 
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getFirstName() {
@@ -59,4 +75,13 @@ public class MyUser {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getAuthority() {
+        return authority;
+    }
+
+    public void setAuthority(String authority) {
+        this.authority = authority;
+    }
+
 }
