@@ -40,9 +40,8 @@ public class AuthController {
     @PostMapping("/changepass")
     public ResponseEntity<?> changePassword(Authentication auth,
                                             @RequestBody @Valid PasswordRequest passwordRequest) {
-        return myUserService.changePassword(auth, passwordRequest.new_password());
+        return myUserService.changePassword(auth, passwordRequest.newPassword());
     }
 
     record PasswordRequest(@JsonProperty("new_password") String newPassword) {}
-
 }

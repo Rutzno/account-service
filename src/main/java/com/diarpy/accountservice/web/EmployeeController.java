@@ -17,36 +17,34 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api")
 public class EmployeeController {
 
-    private final MyUserService myUserService;
+    private final EmployeeService employeeService;
 
     @Autowired
-    public EmployeeController(MyUserService myUserService) {
-        this.myUserService = myUserService;
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
 
     /**
      * gives access to the employee's payrolls
      */
     @GetMapping("/empl/payment")
-    public MyUser getPayments(Authentication auth) {
-        return myUserService.getUserByEmail(auth);
+    public List<UserPaymentDto> getPayments(Authentication auth, @RequestParam(required = false) String period) {
+        return employeeService.findPayments(auth, period);
     }
 
     /**
      * uploads payrolls
      */
     @PostMapping("/acct/payments")
-    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
-    public void postPayrolls() {
-
+    public ResponseEntity<?> postPayrolls(@RequestBody List<Payment> payments) {
+        return employeeService.savePayrolls(payments);
     }
 
     /**
-     * updates payment information.
+     * changes the salary of a specific user
      */
     @PutMapping("/acct/payments")
-    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
-    public void putPayrolls() {
-
+    public ResponseEntity<?> putPayroll(@RequestBody Payment payment) {
+        return employeeService.updatePayroll(payment);
     }
-}
+}}
