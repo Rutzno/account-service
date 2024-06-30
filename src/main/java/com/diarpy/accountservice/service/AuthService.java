@@ -1,8 +1,10 @@
 package accountservice.service;
 
 import account.entities.MyUser;
+import account.exception.PasswordException;
 import account.exception.UserAlreadyExistException;
 import account.repository.MyUserRepository;
+import account.security.SecurityConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -13,10 +15,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Map;
+
 /**
  * @author Mack_TB
  * @since 23/06/2024
- * @version 1.0.2
+ * @version 1.0.3
  */
 
 @Service
@@ -36,6 +40,8 @@ public class AuthService {
             LOGGER.warn("User with email {} already exists", myUser.getEmail());
             throw new UserAlreadyExistException();
         }
+        isPasswordLengthValid(myUser.getPassword());
+        isPasswordBreached(myUser.getPassword());
         if (errors.hasErrors()) {
             LOGGER.warn("Validation errors; {}", errors.getAllErrors());
             return ResponseEntity.badRequest().build();
@@ -50,6 +56,49 @@ public class AuthService {
 
     public MyUser getUserByEmail(Authentication auth) {
         return myUserRepository.findByEmailIgnoreCase(auth.getName())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "User not found"));
+    }
+
+    public ResponseEntity<?> changePassword(Authentication auth, String newPassword) {
+        LOGGER.info("Change password request for email {}", auth.getName());
+        MyUser currentUser = getUserByEmail(auth);
+        String hashOfOldPassword = currentUser.getPassword();
+
+        isPasswordLengthValid(newPassword);
+        isPasswordBreached(newPassword);
+        arePasswordsSame(newPassword, hashOfOldPassword);
+
+        currentUser.setPassword(passwordEncoder.encode(newPassword));
+        myUserRepository.save(currentUser);
+        Map<String, String> response = Map.of("email", auth.getName(),
+                "status", "The password has been updated successfully");
+        LOGGER.info("The password has been updated successfully {}", newPassword);
+        return ResponseEntity.ok(response);
+    }
+
+    private void isPasswordLengthValid(String password) {
+        if (password == null || password.length() < 12) {
+            LOGGER.warn("Password length must be 12 chars minimum!: {}", password);
+            throw new PasswordException("Password length must be 12 chars minimum!");
+        }
+    }
+
+    private void isPasswordBreached(String password) {
+        if (password != null) {
+            for (String bp : SecurityConfig.breachedPassword) {
+                if (password.equals(bp)) {
+                    LOGGER.warn("The password is in the hacker's database!: {}", password);
+                    throw new PasswordException("The password is in the hacker's database!");
+                }
+            }
+        }
+    }
+
+    private void arePasswordsSame(String newPassword, String hashOfOldPassword) {
+        if (newPassword != null && passwordEncoder.matches(newPassword, hashOfOldPassword)) {
+            LOGGER.warn("The passwords must be different!: {}", newPassword);
+            throw new PasswordException("The passwords must be different!");
+        }
     }
 }
