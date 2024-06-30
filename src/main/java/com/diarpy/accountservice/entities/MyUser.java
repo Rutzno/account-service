@@ -5,10 +5,13 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * @author Mack_TB
  * @since 23/06/2024
- * @version 1.0.3
+ * @version 1.0.5
  */
 
 @Entity
@@ -27,15 +30,17 @@ public class MyUser {
     @Column(unique = true)
     private String email;
     @NotBlank
-    //    @Min(12)
+//    @Min(12)
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String authority;
 
-    public MyUser() {
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_groups",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "group_id"))
+    private Set<Group> userGroups = new HashSet<>();
 
-    }
+    public MyUser() {}
 
     public Long getId() {
         return id;
@@ -77,12 +82,11 @@ public class MyUser {
         this.password = password;
     }
 
-    public String getAuthority() {
-        return authority;
+    public Set<Group> getUserGroups() {
+        return userGroups;
     }
 
-    public void setAuthority(String authority) {
-        this.authority = authority;
+    public void setUserGroups(Set<Group> userGroups) {
+        this.userGroups = userGroups;
     }
-
 }
