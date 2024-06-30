@@ -1,16 +1,18 @@
-package accountservice.entities;
+package account.entities;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Mack_TB
  * @since 23/06/2024
- * @version 1.0.2
+ * @version 1.0.5
  */
 
 public class MyUserAdapter implements UserDetails {
@@ -22,7 +24,12 @@ public class MyUserAdapter implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority(myUser.getAuthority()));
+        Collection<GrantedAuthority> authorities = new HashSet<>();
+        Set<Group> userGroups = myUser.getUserGroups();
+        for (Group group : userGroups) {
+            authorities.add(new SimpleGrantedAuthority(group.getName()));
+        }
+        return authorities;
     }
 
     @Override

@@ -1,4 +1,4 @@
-package accountsecurity.security;
+package accountservice.security;
 
 import accountsecurity.exception.CustomAccessDeniedHandler;
 import org.springframework.beans.factory.annotation.Autowired;
