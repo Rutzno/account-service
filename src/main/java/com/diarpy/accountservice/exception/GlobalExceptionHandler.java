@@ -33,4 +33,13 @@ public class GlobalExceptionHandler {
                 request.getDescription(false).replace("uri=", ""));
         return new ResponseEntity<>(customErrorMessage, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(PaymentException.class)
+    public ResponseEntity<CustomErrorMessage> handlePaymentException(PaymentException ex,
+                                                                     WebRequest request) {
+        CustomErrorMessage customErrorMessage = new CustomErrorMessage(LocalDateTime.now(),
+                400, "Bad Request", ex.getMessage(),
+                request.getDescription(false).replace("uri=", ""));
+        return new ResponseEntity<>(customErrorMessage, HttpStatus.BAD_REQUEST);
+    }
 }
