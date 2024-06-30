@@ -1,4 +1,4 @@
-package account.web;
+package accountservice.web;
 
 import account.entities.MyUser;
 import account.service.MyUserService;
