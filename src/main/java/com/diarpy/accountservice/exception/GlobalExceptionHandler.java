@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 /**
  * @author Mack_TB
  * @since 23/06/2024
- * @version 1.0.3
+ * @version 1.0.4
  */
 
 @ControllerAdvice
