@@ -3,6 +3,12 @@ package account.web;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * @author Mack_TB
+ * @since 23/06/2024
+ * @version 1.0.1
+ */
+
 @RestController
 @RequestMapping("api/admin")
 public class AdminController {

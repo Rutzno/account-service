@@ -7,6 +7,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * @author Mack_TB
+ * @since 23/06/2024
+ * @version 1.0.1
+ */
+
 @RestController
 @RequestMapping("api/auth")
 public class AuthController {

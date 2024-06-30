@@ -4,6 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 
+/**
+ * @author Mack_TB
+ * @since 23/06/2024
+ * @version 1.0.1
+ */
+
 public class MyUser {
     @NotBlank
     @JsonProperty("name")
