@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 /**
  * @author Mack_TB
  * @since 23/06/2024
- * @version 1.0.2
+ * @version 1.0.3
  */
 
 @ControllerAdvice
@@ -22,6 +22,15 @@ public class GlobalExceptionHandler {
                                                                                WebRequest request) {
         CustomErrorMessage customErrorMessage = new CustomErrorMessage(LocalDateTime.now(),
                 400, "Bad Request", ex.getMessage(), request.getDescription(false).replace("uri=", ""));
+        return new ResponseEntity<>(customErrorMessage, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(PasswordException.class)
+    public ResponseEntity<CustomErrorMessage> handlePasswordException(PasswordException ex,
+                                                                      WebRequest request) {
+        CustomErrorMessage customErrorMessage = new CustomErrorMessage(LocalDateTime.now(),
+                400, "Bad Request", ex.getMessage(),
+                request.getDescription(false).replace("uri=", ""));
         return new ResponseEntity<>(customErrorMessage, HttpStatus.BAD_REQUEST);
     }
 }
