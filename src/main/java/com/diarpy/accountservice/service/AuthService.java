@@ -13,6 +13,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
 import org.springframework.web.server.ResponseStatusException;
 
+/**
+ * @author Mack_TB
+ * @since 23/06/2024
+ * @version 1.0.2
+ */
+
 @Service
 public class AuthService {
     private static final Logger LOGGER = LoggerFactory.getLogger(MyUserService.class);
