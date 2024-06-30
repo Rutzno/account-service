@@ -1,0 +1,29 @@
+package accountservice.security;
+
+import accountservice.entities.Group;
+import accountservice.repository.GroupRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+/**
+ * @author Mack_TB
+ * @since 23/06/2024
+ * @version 1.0.5
+ */
+
+@Component
+public class DataLoader {
+    private final GroupRepository groupRepository;
+
+    @Autowired
+    public DataLoader(GroupRepository groupRepository) {
+        this.groupRepository = groupRepository;
+        createRoles();
+    }
+
+    private void createRoles() {
+        groupRepository.save(new Group(1L, "ROLE_ADMINISTRATOR"));
+        groupRepository.save(new Group(2L, "ROLE_USER"));
+        groupRepository.save(new Group(3L, "ROLE_ACCOUNTANT"));
+    }
+}
