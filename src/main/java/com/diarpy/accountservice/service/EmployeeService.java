@@ -26,7 +26,7 @@ import java.util.Map;
 /**
  * @author Mack_TB
  * @since 23/06/2024
- * @version 1.0.4
+ * @version 1.0.5
  */
 
 @Service
@@ -77,7 +77,7 @@ public class EmployeeService {
             processedPayments.add(payment);
         }
         if (!errorMessage.isEmpty()) {
-            throw new PaymentException(errorMessage.toString());
+            throw new BadRequestException(errorMessage.toString());
         }
     }
 
@@ -101,7 +101,7 @@ public class EmployeeService {
             errorMessage.append("Wrong date! ");
         }
         if (!errorMessage.isEmpty()) {
-            throw new PaymentException(errorMessage.toString());
+            throw new BadRequestException(errorMessage.toString());
         }
         Payment updatedPayment = paymentRepository.findByEmployeeAndPeriod(payment.getEmployee(), payment.getPeriod());
         updatedPayment.setSalary(payment.getSalary());
@@ -110,7 +110,7 @@ public class EmployeeService {
         return ResponseEntity.ok(response);
     }
 
-    public List<UserPaymentDto> findPayments(Authentication auth, String period) {
+    public ResponseEntity<?> findPayments(Authentication auth, String period) {
         MyUser myUser = getUserByEmail(auth);
         List<UserPaymentDto> userPaymentDtos = new ArrayList<>();
         if (period == null) {
@@ -121,13 +121,14 @@ public class EmployeeService {
             }
         } else {
             if (!isValidDate(period)) {
-                throw new PaymentException("Wrong date!");
+                throw new BadRequestException("Wrong date!");
             }
             Payment payment = paymentRepository.findByEmployeeAndPeriod(auth.getName(), period);
             if (payment != null) {
-                userPaymentDtos.add(new UserPaymentDto(myUser, payment));
+                UserPaymentDto userPaymentDto = new UserPaymentDto(myUser, payment);
+                return ResponseEntity.ok(userPaymentDto);
             }
         }
-        return userPaymentDtos;
+        return ResponseEntity.ok(userPaymentDtos);
     }
 }
