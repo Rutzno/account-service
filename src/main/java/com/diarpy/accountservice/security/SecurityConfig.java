@@ -15,7 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 /**
  * @author Mack_TB
  * @since 23/06/2024
- * @version 1.0.3
+ * @version 1.0.4
  */
 
 @Configuration
@@ -40,6 +40,7 @@ public class SecurityConfig {
                 .headers(headers -> headers.frameOptions().disable()) // For the H2 console
                 .authorizeHttpRequests(auth -> auth  // manage access
                         .requestMatchers(HttpMethod.POST, "/api/auth/signup").permitAll()
+                        .requestMatchers("/api/acct/payments").permitAll()
                         .requestMatchers("/h2-console/**").permitAll() // expose H2 console
                         .requestMatchers("/actuator/shutdown").permitAll() // required for tests
                         .anyRequest().authenticated()
