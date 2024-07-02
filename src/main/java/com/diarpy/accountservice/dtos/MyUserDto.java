@@ -1,7 +1,7 @@
-package accountservice.dtos;
+package com.diarpy.accountservice.dtos;
 
-import accountservice.entities.Group;
-import accountservice.entities.MyUser;
+import com.diarpy.accountservice.entities.MyUser;
+import com.diarpy.accountservice.entities.Group;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.*;

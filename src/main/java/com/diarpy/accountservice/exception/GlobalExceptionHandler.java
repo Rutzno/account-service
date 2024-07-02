@@ -1,4 +1,4 @@
-package accountservice.exception;
+package com.diarpy.accountservice.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;

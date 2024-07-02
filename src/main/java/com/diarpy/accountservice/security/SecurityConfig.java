@@ -1,6 +1,6 @@
-package accountservice.security;
+package com.diarpy.accountservice.security;
 
-import accountservice.exception.CustomAccessDeniedHandler;
+import com.diarpy.accountservice.exception.CustomAccessDeniedHandler;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

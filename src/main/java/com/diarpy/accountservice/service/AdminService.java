@@ -1,15 +1,15 @@
-package accountservice.service;
+package com.diarpy.accountservice.service;
 
-import accountservice.dtos.MyUserDto;
-import accountservice.dtos.DataRequest;
-import accountservice.entities.Group;
-import accountservice.entities.MyUser;
-import accountservice.enums.Operation;
-import accountservice.exception.BadRequestException;
-import accountservice.exception.NotFoundException;
-import accountservice.exception.UserNotFoundException;
-import accountservice.repository.GroupRepository;
-import accountservice.repository.MyUserRepository;
+import com.diarpy.accountservice.dtos.MyUserDto;
+import com.diarpy.accountservice.dtos.DataRequest;
+import com.diarpy.accountservice.entities.Group;
+import com.diarpy.accountservice.entities.MyUser;
+import com.diarpy.accountservice.enums.Operation;
+import com.diarpy.accountservice.exception.BadRequestException;
+import com.diarpy.accountservice.exception.NotFoundException;
+import com.diarpy.accountservice.exception.UserNotFoundException;
+import com.diarpy.accountservice.repository.GroupRepository;
+import com.diarpy.accountservice.repository.MyUserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

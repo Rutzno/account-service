@@ -1,4 +1,4 @@
-package accountservice.exception;
+package com.diarpy.accountservice.exception;
 
 import java.time.LocalDateTime;
 

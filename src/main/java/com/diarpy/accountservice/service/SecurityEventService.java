@@ -1,7 +1,7 @@
-package accountservice.service;
+package com.diarpy.accountservice.service;
 
-import accountservice.entities.SecurityEvent;
-import accountservice.repository.SecurityEventRepository;
+import com.diarpy.accountservice.entities.SecurityEvent;
+import com.diarpy.accountservice.repository.SecurityEventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

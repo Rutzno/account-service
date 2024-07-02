@@ -1,7 +1,7 @@
-package accountservice.security;
+package com.diarpy.accountservice.security;
 
-import accountservice.entities.Group;
-import accountservice.repository.GroupRepository;
+import com.diarpy.accountservice.entities.Group;
+import com.diarpy.accountservice.repository.GroupRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

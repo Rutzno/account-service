@@ -1,6 +1,6 @@
-package accountservice.dtos;
+package com.diarpy.accountservice.dtos;
 
-import accountservice.enums.Operation;
+import com.diarpy.accountservice.enums.Operation;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;

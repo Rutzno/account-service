@@ -1,6 +1,6 @@
-package accountservice.repository;
+package com.diarpy.accountservice.repository;
 
-import accountservice.entities.MyUser;
+import com.diarpy.accountservice.entities.MyUser;
 import jakarta.transaction.Transactional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

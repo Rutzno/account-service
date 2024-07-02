@@ -1,4 +1,4 @@
-package accountservice.security;
+package com.diarpy.accountservice.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;

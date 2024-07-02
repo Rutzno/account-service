@@ -1,13 +1,13 @@
-package accountservice.service;
+package com.diarpy.accountservice.service;
 
-import accountservice.dtos.MyUserDto;
-import accountservice.entities.Group;
-import accountservice.entities.MyUser;
-import accountservice.exception.PasswordException;
-import accountservice.exception.UserAlreadyExistException;
-import accountservice.repository.GroupRepository;
-import accountservice.repository.MyUserRepository;
-import accountservice.security.SecurityConfig;
+import com.diarpy.accountservice.dtos.MyUserDto;
+import com.diarpy.accountservice.entities.Group;
+import com.diarpy.accountservice.entities.MyUser;
+import com.diarpy.accountservice.exception.PasswordException;
+import com.diarpy.accountservice.exception.UserAlreadyExistException;
+import com.diarpy.accountservice.repository.GroupRepository;
+import com.diarpy.accountservice.repository.MyUserRepository;
+import com.diarpy.accountservice.security.SecurityConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;

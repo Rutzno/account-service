@@ -1,7 +1,6 @@
-package accountservice.exception;
+package com.diarpy.accountservice.exception;
 
-import accountservice.service.SecurityEventService;
-import com.fasterxml.jackson.core.ObjectCodec;
+import com.diarpy.accountservice.service.SecurityEventService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,7 +12,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.stereotype.Component;
 

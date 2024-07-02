@@ -1,8 +1,8 @@
-package accountservice.service;
+package com.diarpy.accountservice.service;
 
-import account.entities.MyUser;
-import account.entities.MyUserAdapter;
-import account.repository.MyUserRepository;
+import com.diarpy.accountservice.entities.MyUser;
+import com.diarpy.accountservice.entities.MyUserAdapter;
+import com.diarpy.accountservice.repository.MyUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

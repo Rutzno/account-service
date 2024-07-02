@@ -1,13 +1,13 @@
-package accountservice.service;
+package com.diarpy.accountservice.service;
 
-import accountservice.dtos.UserPaymentDto;
-import accountservice.entities.MyUser;
-import accountservice.entities.Payment;
-import accountservice.entities.SecurityEvent;
-import accountservice.exception.BadRequestException;
-import accountservice.repository.MyUserRepository;
-import accountservice.repository.PaymentRepository;
-import accountservice.repository.SecurityEventRepository;
+import com.diarpy.accountservice.dtos.UserPaymentDto;
+import com.diarpy.accountservice.entities.MyUser;
+import com.diarpy.accountservice.entities.Payment;
+import com.diarpy.accountservice.entities.SecurityEvent;
+import com.diarpy.accountservice.exception.BadRequestException;
+import com.diarpy.accountservice.repository.MyUserRepository;
+import com.diarpy.accountservice.repository.PaymentRepository;
+import com.diarpy.accountservice.repository.SecurityEventRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

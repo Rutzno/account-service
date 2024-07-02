@@ -1,6 +1,6 @@
-package accountservice.repository;
+package com.diarpy.accountservice.repository;
 
-import accountservice.entities.SecurityEvent;
+import com.diarpy.accountservice.entities.SecurityEvent;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 /**

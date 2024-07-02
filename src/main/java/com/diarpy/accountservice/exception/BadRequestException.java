@@ -1,4 +1,4 @@
-package accountservice.exception;
+package com.diarpy.accountservice.exception;
 
 /**
  * @author Mack_TB

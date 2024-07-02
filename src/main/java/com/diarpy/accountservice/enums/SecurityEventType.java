@@ -1,4 +1,4 @@
-package accountservice.enums;
+package com.diarpy.accountservice.enums;
 
 /**
  * @author Mack_TB

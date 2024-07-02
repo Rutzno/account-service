@@ -1,6 +1,6 @@
-package accountservice.repository;
+package com.diarpy.accountservice.repository;
 
-import accountservice.entities.Payment;
+import com.diarpy.accountservice.entities.Payment;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 

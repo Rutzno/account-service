@@ -1,8 +1,8 @@
-package accountservice.web;
+package com.diarpy.accountservice.web;
 
-import accountservice.dtos.MyUserDto;
-import accountservice.dtos.DataRequest;
-import accountservice.service.AdminService;
+import com.diarpy.accountservice.dtos.MyUserDto;
+import com.diarpy.accountservice.dtos.DataRequest;
+import com.diarpy.accountservice.service.AdminService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

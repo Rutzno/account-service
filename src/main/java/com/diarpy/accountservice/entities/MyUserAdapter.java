@@ -1,4 +1,4 @@
-package account.entities;
+package com.diarpy.accountservice.entities;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

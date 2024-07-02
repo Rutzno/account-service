@@ -1,7 +1,7 @@
-package accountservice.dtos;
+package com.diarpy.accountservice.dtos;
 
-import accountservice.entities.MyUser;
-import accountservice.entities.Payment;
+import com.diarpy.accountservice.entities.MyUser;
+import com.diarpy.accountservice.entities.Payment;
 
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;

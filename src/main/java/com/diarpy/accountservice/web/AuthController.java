@@ -1,7 +1,8 @@
-package accountservice.web;
+package com.diarpy.accountservice.web;
 
-import accountservice.entities.MyUser;
-import accountservice.service.AuthService;
+import com.diarpy.accountservice.dtos.MyUserDto;
+import com.diarpy.accountservice.entities.MyUser;
+import com.diarpy.accountservice.service.AuthService;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,25 +14,25 @@ import org.springframework.web.bind.annotation.*;
 /**
  * @author Mack_TB
  * @since 23/06/2024
- * @version 1.0.4
+ * @version 1.0.5
  */
 
 @RestController
 @RequestMapping("api/auth")
 public class AuthController {
-    private final MyUserService myUserService;
+    private final AuthService authService;
 
     @Autowired
-    public AuthController(MyUserService myUserService) {
-        this.myUserService = myUserService;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
     /**
      * allows the user to register on the service
      */
     @PostMapping("/signup")
-    public ResponseEntity<MyUser> register(@RequestBody @Valid MyUser user, Errors errors) {
-        return myUserService.register(user, errors);
+    public ResponseEntity<MyUserDto> register(@RequestBody @Valid MyUser user, Errors errors) {
+        return authService.register(user, errors);
     }
 
     /**
@@ -39,8 +40,8 @@ public class AuthController {
      */
     @PostMapping("/changepass")
     public ResponseEntity<?> changePassword(Authentication auth,
-                                            @RequestBody @Valid PasswordRequest passwordRequest) {
-        return myUserService.changePassword(auth, passwordRequest.newPassword());
+                                            @RequestBody PasswordRequest passwordRequest) {
+        return authService.changePassword(auth, passwordRequest.newPassword());
     }
 
     record PasswordRequest(@JsonProperty("new_password") String newPassword) {}

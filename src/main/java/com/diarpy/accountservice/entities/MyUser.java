@@ -1,4 +1,4 @@
-package accountservice.entities;
+package com.diarpy.accountservice.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;

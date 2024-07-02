@@ -1,6 +1,6 @@
-package accountservice.repository;
+package com.diarpy.accountservice.repository;
 
-import accountservice.entities.Group;
+import com.diarpy.accountservice.entities.Group;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

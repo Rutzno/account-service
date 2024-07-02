@@ -1,7 +1,7 @@
-package accountservice.web;
+package com.diarpy.accountservice.web;
 
-import accountservice.entities.Payment;
-import accountservice.service.EmployeeService;
+import com.diarpy.accountservice.entities.Payment;
+import com.diarpy.accountservice.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;

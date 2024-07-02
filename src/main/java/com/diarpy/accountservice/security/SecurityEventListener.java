@@ -1,10 +1,10 @@
-package accountservice.security;
+package com.diarpy.accountservice.security;
 
-import accountservice.dtos.MyUserDto;
-import accountservice.entities.MyUser;
-import accountservice.entities.MyUserAdapter;
-import accountservice.service.EmployeeService;
-import accountservice.service.SecurityEventService;
+import com.diarpy.accountservice.dtos.MyUserDto;
+import com.diarpy.accountservice.entities.MyUser;
+import com.diarpy.accountservice.entities.MyUserAdapter;
+import com.diarpy.accountservice.service.EmployeeService;
+import com.diarpy.accountservice.service.SecurityEventService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;

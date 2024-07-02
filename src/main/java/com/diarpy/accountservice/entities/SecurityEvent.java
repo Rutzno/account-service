@@ -1,4 +1,4 @@
-package accountservice.entities;
+package com.diarpy.accountservice.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
